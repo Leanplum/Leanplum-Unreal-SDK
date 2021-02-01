@@ -1,0 +1,26 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "LeanplumSDK",
+	"Description": "Leanplum Unreal Engine SDK",
+	"Category": "Marketing",
+	"CreatedBy": "Milos Jakovljevic, Leanplum Inc.",
+	"CreatedByURL": "https://leanplum.com",
+	"DocsURL": "https://docs.leanplum.com",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EnabledByDefault": true,
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "LeanplumSDK",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"RequiresBuildPlatform": true
+}

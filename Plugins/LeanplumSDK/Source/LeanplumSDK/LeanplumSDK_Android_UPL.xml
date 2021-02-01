@@ -1,0 +1,120 @@
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+    <init>
+        <log text="LeanplumSDK Android initialization"/>
+    </init>
+
+	<!-- Copy google services json to apk -->
+	<prebuildCopies>
+		<copyFile src="$S(PluginDir)/../../../../Config/google-services.json" dst="$S(BuildDir)/gradle/app/google-services.json"/>
+	</prebuildCopies>
+
+    <buildGradleAdditions>
+        <insert>
+            repositories {
+                mavenCentral()
+            }
+            dependencies {
+                implementation "com.leanplum:leanplum-core:5.4.2"
+                // implementation "com.leanplum:leanplum-push:5.4.2"
+                // implementation "com.leanplum:leanplum-fcm:5.4.2"
+                // implementation "com.leanplum:leanplum-location:5.4.2"
+            }
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+        </insert>
+    </buildGradleAdditions>
+    <baseBuildGradleAdditions>
+      <insert>
+          allprojects {
+            def mappings = [
+              'android.support.annotation': 'androidx.annotation',
+              'android.arch.lifecycle': 'androidx.lifecycle',
+              'android.support.v4.app.NotificationCompat': 'androidx.core.app.NotificationCompat',
+              'android.support.v4.app.ActivityCompat': 'androidx.core.app.ActivityCompat',
+              'android.support.v4.content.ContextCompat': 'androidx.core.content.ContextCompat',
+              'android.support.v13.app.FragmentCompat': 'androidx.legacy.app.FragmentCompat',
+              'android.arch.lifecycle.Lifecycle': 'androidx.lifecycle.Lifecycle',
+              'android.arch.lifecycle.LifecycleObserver': 'androidx.lifecycle.LifecycleObserver',
+              'android.arch.lifecycle.OnLifecycleEvent': 'androidx.lifecycle.OnLifecycleEvent',
+              'android.arch.lifecycle.ProcessLifecycleOwner': 'androidx.lifecycle.ProcessLifecycleOwner',
+              'android.support.v4.app.NotificationManagerCompat': 'androidx.core.app.NotificationManagerCompat',
+              'android.support.v4.content.FileProvider': 'androidx.core.content.FileProvider'
+            ]
+
+            beforeEvaluate { project ->
+              project.rootProject.projectDir.traverse(type: groovy.io.FileType.FILES, nameFilter: ~/.*\.java$/) { f ->
+                mappings.each { entry ->
+                  if (f.getText('UTF-8').contains(entry.key)) {
+                    println "Updating ${entry.key} to ${entry.value} in file ${f}"
+                    ant.replace(file: f, token: entry.key, value: entry.value)
+                  }
+                }
+              }
+            }
+          }
+      </insert>
+    </baseBuildGradleAdditions>
+    <buildscriptGradleAdditions>
+        <insert>
+        </insert>
+    </buildscriptGradleAdditions>
+    <gradleProperties>
+        <insert>
+            org.gradle.jvmargs='-Dfile.encoding=UTF-8'
+            android.useAndroidX=true
+            android.enableJetifier=true
+        </insert>
+    </gradleProperties>
+    <androidManifestUpdates>
+        <addPermission android:name="android.permission.INTERNET" />
+        <addPermission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </androidManifestUpdates>
+    <gameActivityImportAdditions>
+        <insert>
+			import com.leanplum.*;
+			import com.leanplum.callbacks.*;
+		</insert>
+    </gameActivityImportAdditions>
+    <gameActivityClassAdditions>
+        <insert>
+			class NativeStartCallback extends StartCallback {
+
+			    private long nativeHandle = 0;
+
+			    @Override
+			    public void onResponse(boolean success) {
+			        on_start(success);
+			    }
+
+			    private native void on_start(boolean success);
+			}
+			
+			class NativeVariablesChangedCallback extends VariablesChangedCallback {
+
+			    private long nativeHandle = 0;
+
+			    @Override
+			    public void variablesChanged() {
+			        on_variables_changed();
+			    }
+
+			    private native void on_variables_changed();
+			}
+			
+			public void leanplum_configure(String client, String version) {
+			    try {
+			        final Method setClient = Leanplum.class.getDeclaredMethod("setClient", String.class, String.class, String.class);
+			        setClient.setAccessible(true);
+			        setClient.invoke(null, client, version, null);
+			    } catch (Exception e) {
+			    }
+			    Leanplum.setApplicationContext(this);
+			    LeanplumActivityHelper.enableLifecycleCallbacks(getApplication());			
+			}
+		</insert>
+    </gameActivityClassAdditions>
+</root>
