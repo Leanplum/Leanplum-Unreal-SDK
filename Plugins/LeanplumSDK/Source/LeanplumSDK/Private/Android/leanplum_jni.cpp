@@ -6,9 +6,9 @@
 //  Copyright © 2021 Leanplum, Inc. All rights reserved.
 //
 
-#include "leanplum_jni.h"
-
 #if PLATFORM_ANDROID
+
+#include "leanplum_jni.h"
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_epicgames_ue4_GameActivity_00024NativeStartCallback_on_1start(JNIEnv * env, jobject object, jboolean success)
@@ -36,8 +36,24 @@ Java_com_epicgames_ue4_GameActivity_00024NativeVariablesChangedCallback_on_1vari
 	}
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_epicgames_ue4_GameActivity_00024NativeActionCallback_on_1action_1callback(JNIEnv * env, jobject object, jobject context)
+{
+	auto callback = get_handle<leanplum_jni::native_action_callback>(env, object);
+	if (callback)
+	{
+		if (callback->action)
+		{
+			// todo: keep reference to java action context
+			callback->action(nullptr);
+		}
+	}
+}
+
 leanplum_jni::leanplum_jni()
 {
+	UE_LOG(LogLeanplumSDK, Display, TEXT("initializing java jni layer"));
+
 	if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
 	{
 		UE_LOG(LogLeanplumSDK, Display, TEXT("searching for JNI classess and methods"));
@@ -82,7 +98,18 @@ leanplum_jni::leanplum_jni()
 		track_with_value_and_info = FJavaWrapper::FindStaticMethod(env, leanplum, "track", "(Ljava/lang/String;DLjava/lang/String;)V", false);
 		track_with_value_info_and_params = FJavaWrapper::FindStaticMethod(env, leanplum, "track", "(Ljava/lang/String;DLjava/lang/String;Ljava/util/Map;)V", false);
 
+		define_action = FJavaWrapper::FindStaticMethod(env, leanplum, "defineAction", "(Ljava/lang/String;ILcom/leanplum/ActionArgs;)V", false);
+		define_action_with_callback = FJavaWrapper::FindStaticMethod(env, leanplum, "defineAction", "(Ljava/lang/String;ILcom/leanplum/ActionArgs;Lcom/leanplum/callbacks/ActionCallback;)V", false);
+		define_action_with_options_and_callback = FJavaWrapper::FindStaticMethod(env, leanplum, "defineAction", "(Ljava/lang/String;ILcom/leanplum/ActionArgs;Ljava/util/Map;Lcom/leanplum/callbacks/ActionCallback;)V", false);
+
 		track_purchase = FJavaWrapper::FindStaticMethod(env, leanplum, "trackPurchase", "(Ljava/lang/String;DLjava/lang/String;Ljava/util/Map;)V", false);
+
+		java_action_args.java_class = FAndroidApplication::FindJavaClass("com/leanplum/ActionArgs");
+		java_action_args.class_object = reinterpret_cast<jclass>(env->NewGlobalRef(java_action_args.java_class));
+		java_action_args.constructor = FJavaWrapper::FindMethod(env, java_action_args.class_object, "<init>", "()V", false);
+		java_action_args.with_object = FJavaWrapper::FindMethod(env, java_action_args.class_object, "with", "(Ljava/lang/String;Ljava/lang/Object;)Lcom/leanplum/ActionArgs;", false);
+		java_action_args.with_action = FJavaWrapper::FindMethod(env, java_action_args.class_object, "withAction", "(Ljava/lang/String;Ljava/lang/String;)Lcom/leanplum/ActionArgs;", false);
+		java_action_args.with_color = FJavaWrapper::FindMethod(env, java_action_args.class_object, "withColor", "(Ljava/lang/String;I)Lcom/leanplum/ActionArgs;", false);
 	}
 }
 

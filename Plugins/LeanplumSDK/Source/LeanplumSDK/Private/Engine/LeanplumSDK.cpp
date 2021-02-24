@@ -9,28 +9,20 @@
 #include "LeanplumSDK.h"
 #include "leanplum.h"
 #include "macros.h"
-
-#if PLATFORM_IOS
-#include "leanplum_ios.h"
-#elif PLATFORM_ANDROID
-#include "leanplum_android.h"
-#else
-#include "leanplum_native.h"
-#endif
+#include "leanplum.h"
 
 leanplum* lp;
 
 ULeanplumSDK::ULeanplumSDK(const FObjectInitializer& objectInitializer) :
 	Super(objectInitializer)
 {
+	lp = new leanplum();
+
 #if PLATFORM_IOS
-	lp = new leanplum_ios();
 	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for iOS"));
 #elif PLATFORM_ANDROID
-	lp = new leanplum_android();
 	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Android"));
 #else
-	lp = new leanplum_native();
 	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Native"));
 #endif
 }

@@ -30,6 +30,7 @@ namespace UnrealBuildTool.Rules
             new string[]
             {
                 Path.Combine(ModuleDirectory, "Private"),
+                Path.Combine(ModuleDirectory, "Private/Engine"),
                 Path.Combine(ModuleDirectory, "Private/Shared"),
             }
             );
@@ -84,12 +85,11 @@ namespace UnrealBuildTool.Rules
                     }
                 );
                 PublicIncludePathModuleNames.Add("Launch");
-                
+
                 string pluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
                 AdditionalPropertiesForReceipt.Add("IOSPlugin", Path.Combine(pluginPath, "LeanplumSDK_iOS_UPL.xml"));
             }
-            
-            if (Target.Platform == UnrealTargetPlatform.Android)
+            else if (Target.Platform == UnrealTargetPlatform.Android)
             {
                 PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/Android"));
 
@@ -97,9 +97,16 @@ namespace UnrealBuildTool.Rules
                 AdditionalPropertiesForReceipt.Add("AndroidPlugin", System.IO.Path.Combine(pluginPath, "LeanplumSDK_Android_UPL.xml"));
 
                 PublicIncludePathModuleNames.Add("Launch");
-            } 
-            
-            PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/Native"));
+            }
+            else
+            {
+                PrivateIncludePaths.AddRange(
+                     new string[]
+                     {
+                        Path.Combine(ModuleDirectory, "Private/Native")
+                     }
+                 );
+            }
         }
     }
 }

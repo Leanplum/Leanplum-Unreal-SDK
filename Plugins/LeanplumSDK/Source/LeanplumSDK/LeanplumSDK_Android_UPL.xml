@@ -105,6 +105,19 @@
 			    private native void on_variables_changed();
 			}
 			
+			class NativeActionCallback extends ActionCallback {
+
+			    private long nativeHandle = 0;
+
+			    @Override
+			    public boolean onResponse(ActionContext context) {
+			        on_action_callback(context);
+					return true;
+			    }
+
+			    private native void on_action_callback(ActionContext context);
+			}
+			
 			public void leanplum_configure(String client, String version) {
 			    try {
 			        final Method setClient = Leanplum.class.getDeclaredMethod("setClient", String.class, String.class, String.class);

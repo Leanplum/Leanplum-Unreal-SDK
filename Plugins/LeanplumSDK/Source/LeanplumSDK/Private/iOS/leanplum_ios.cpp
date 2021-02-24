@@ -1,12 +1,18 @@
 //
-//  leanplum_ios.m
+//  leanplum_ios.cpp
 //  Leanplum-SDK
 //
 //  Created by Milos Jakovljevic.
 //  Copyright © 2021 Leanplum, Inc. All rights reserved.
 //
 
-#include "leanplum_ios.h"
+#if PLATFORM_IOS
+
+#pragma clang diagnostic ignored "-Wobjc-property-no-attribute"
+
+#import <Leanplum/Leanplum.h>
+#import <Leanplum/LPPushNotificationsManager.h>
+#include "leanplum.h"
 #include "UELeanplumSDKEditor.h"
 #include "CoreMinimal.h"
 
@@ -14,17 +20,17 @@
 + (void)setClient:(NSString *)client withVersion:(NSString *)version;
 @end
 
-leanplum_ios::leanplum_ios()
+leanplum::leanplum()
 {
 
 }
 
-leanplum_ios::~leanplum_ios()
+leanplum::~leanplum()
 {
 
 }
 
-void leanplum_ios::configure()
+void leanplum::configure()
 {
 	const ULeanplumSDKEditor* settings = GetDefault<ULeanplumSDKEditor>();
 	FString app_key = settings->appKey;
@@ -47,27 +53,27 @@ void leanplum_ios::configure()
     }
 }
 
-void leanplum_ios::set_app_id_with_development_key(const std::string& app_id, const std::string& dev_key)
+void leanplum::set_app_id_with_development_key(const std::string& app_id, const std::string& dev_key)
 {
     [Leanplum setAppId:[NSString stringWithUTF8String:app_id.c_str()] withDevelopmentKey:[NSString stringWithUTF8String:dev_key.c_str()]];
 }
 
-void leanplum_ios::set_app_id_with_production_key(const std::string& app_id, const std::string& prod_key)
+void leanplum::set_app_id_with_production_key(const std::string& app_id, const std::string& prod_key)
 {
     [Leanplum setAppId:[NSString stringWithUTF8String:app_id.c_str()] withProductionKey:[NSString stringWithUTF8String:prod_key.c_str()]];   
 }
 
-void leanplum_ios::start()
+void leanplum::start()
 {
     [Leanplum start];
 }
 
-void leanplum_ios::start(const std::string &user_id)
+void leanplum::start(const std::string &user_id)
 {
     [Leanplum startWithUserId:[NSString stringWithUTF8String:user_id.c_str()]];
 }
 
-void leanplum_ios::start(const std::string &user_id, const std::unordered_map<std::string, std::string>& attributes)
+void leanplum::start(const std::string &user_id, const std::unordered_map<std::string, std::string>& attributes)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto pair : attributes)
@@ -78,7 +84,7 @@ void leanplum_ios::start(const std::string &user_id, const std::unordered_map<st
     [Leanplum startWithUserId:[NSString stringWithUTF8String:user_id.c_str()] userAttributes:att];
 }
 
-void leanplum_ios::start(const std::string &user_id, const std::unordered_map<std::string, std::string>& attributes, std::function<void(bool)> callback)
+void leanplum::start(const std::string &user_id, const std::unordered_map<std::string, std::string>& attributes, std::function<void(bool)> callback)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto pair : attributes)
@@ -93,12 +99,27 @@ void leanplum_ios::start(const std::string &user_id, const std::unordered_map<st
     }];
 }
 
-bool leanplum_ios::has_started()
+std::string leanplum::get_app_id()
+{
+    return std::string();
+}
+
+std::string leanplum::get_development_key()
+{
+    return std::string();
+}
+
+std::string leanplum::get_production_key()
+{
+    return std::string();
+}
+
+bool leanplum::has_started()
 {
 	return [Leanplum hasStarted];
 }
 
-void leanplum_ios::force_content_update(std::function<void()> callback)
+void leanplum::force_content_update(std::function<void()> callback)
 {
     [Leanplum forceContentUpdate:^{
         if (callback) {
@@ -107,12 +128,12 @@ void leanplum_ios::force_content_update(std::function<void()> callback)
     }];
 }
 
-void leanplum_ios::set_user_id(const std::string& user_id)
+void leanplum::set_user_id(const std::string& user_id)
 {
     [Leanplum setUserId:[NSString stringWithUTF8String:user_id.c_str()]];
 }
 
-void leanplum_ios::set_user_id_with_attributes(const std::string& user_id, const std::unordered_map<std::string, std::string>& attributes)
+void leanplum::set_user_id_with_attributes(const std::string& user_id, const std::unordered_map<std::string, std::string>& attributes)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : attributes)
@@ -123,12 +144,12 @@ void leanplum_ios::set_user_id_with_attributes(const std::string& user_id, const
     [Leanplum setUserId:[NSString stringWithUTF8String:user_id.c_str()] withUserAttributes:att];
 }
 
-void leanplum_ios::set_device_id(const std::string& device_id)
+void leanplum::set_device_id(const std::string& device_id)
 {
     [Leanplum setDeviceId:[NSString stringWithUTF8String:device_id.c_str()]];
 }
 
-void leanplum_ios::set_user_attributes(const std::unordered_map<std::string, std::string>& attributes)
+void leanplum::set_user_attributes(const std::unordered_map<std::string, std::string>& attributes)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : attributes)
@@ -139,7 +160,7 @@ void leanplum_ios::set_user_attributes(const std::unordered_map<std::string, std
     [Leanplum setUserAttributes:att];
 }
 
-std::string leanplum_ios::get_user_id()
+std::string leanplum::get_user_id()
 {
     NSString *userId = [Leanplum userId];
     if (userId) {
@@ -148,7 +169,7 @@ std::string leanplum_ios::get_user_id()
     return "";
 }
 
-std::string leanplum_ios::get_device_id()
+std::string leanplum::get_device_id()
 {
     NSString *deviceId = [Leanplum deviceId];
     if (deviceId) {
@@ -157,17 +178,17 @@ std::string leanplum_ios::get_device_id()
     return "";
 }
 
-void leanplum_ios::advance_to_state(const std::string& state)
+void leanplum::advance_to_state(const std::string& state)
 {
     [Leanplum advanceTo:[NSString stringWithUTF8String:state.c_str()]];
 }
 
-void leanplum_ios::advance_to_state(const std::string& state, const std::string& info)
+void leanplum::advance_to_state(const std::string& state, const std::string& info)
 {
     [Leanplum advanceTo:[NSString stringWithUTF8String:state.c_str()] withInfo:[NSString stringWithUTF8String:info.c_str()]];
 }
 
-void leanplum_ios::advance_to_state(const std::string& state, const std::string& info, const std::unordered_map<std::string, std::string>& params)
+void leanplum::advance_to_state(const std::string& state, const std::string& info, const std::unordered_map<std::string, std::string>& params)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
@@ -178,32 +199,32 @@ void leanplum_ios::advance_to_state(const std::string& state, const std::string&
     [Leanplum advanceTo:[NSString stringWithUTF8String:state.c_str()] withInfo:[NSString stringWithUTF8String:info.c_str()] andParameters:att];
 }
 
-void leanplum_ios::pause_state()
+void leanplum::pause_state()
 {
     [Leanplum pauseState];
 }
 
-void leanplum_ios::resume_state()
+void leanplum::resume_state()
 {
     [Leanplum resumeState];
 }
 
-void leanplum_ios::track(const std::string& name)
+void leanplum::track(const std::string& name)
 {
     [Leanplum track:[NSString stringWithUTF8String:name.c_str()]];
 }
 
-void leanplum_ios::track(const std::string& name, double value)
+void leanplum::track(const std::string& name, double value)
 {
     [Leanplum track:[NSString stringWithUTF8String:name.c_str()] withValue:value];
 }
 
-void leanplum_ios::track(const std::string& name, double value, const std::string& info)
+void leanplum::track(const std::string& name, double value, const std::string& info)
 {
     [Leanplum track:[NSString stringWithUTF8String:name.c_str()] withValue:value andInfo:[NSString stringWithUTF8String:info.c_str()]];
 }
 
-void leanplum_ios::track(const std::string& name, double value, const std::string& info, const std::unordered_map<std::string, std::string>& params)
+void leanplum::track(const std::string& name, double value, const std::string& info, const std::unordered_map<std::string, std::string>& params)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
@@ -213,12 +234,36 @@ void leanplum_ios::track(const std::string& name, double value, const std::strin
     [Leanplum track:[NSString stringWithUTF8String:name.c_str()] withValue:value andInfo:[NSString stringWithUTF8String:info.c_str()] andParameters:att];
 }
 
-void leanplum_ios::automatically_track_iap()
+void leanplum::define_action(const std::string& name, int kind, action_args* args)
+{
+    if (args)
+    {
+        delete args;
+    }
+}
+
+void leanplum::define_action(const std::string& name, int kind, action_args* args, const std::unordered_map<std::string, std::string>& options)
+{
+    if (args)
+    {
+        delete args;
+    }
+}
+
+void leanplum::define_action(const std::string& name, int kind, action_args* args, const std::unordered_map<std::string, std::string>& options, std::function<void(const action_context*)> callback)
+{
+    if (args)
+    {
+        delete args;
+    }
+}
+
+void leanplum::automatically_track_iap()
 {
     [Leanplum trackInAppPurchases];
 }
 
-void leanplum_ios::track_purchase(const std::string& name, double value, const std::string& currency_code, const std::unordered_map<std::string, std::string>& params)
+void leanplum::track_purchase(const std::string& name, double value, const std::string& currency_code, const std::unordered_map<std::string, std::string>& params)
 {
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
@@ -228,7 +273,9 @@ void leanplum_ios::track_purchase(const std::string& name, double value, const s
     [Leanplum trackPurchase:[NSString stringWithUTF8String:name.c_str()] withValue:value andCurrencyCode:[NSString stringWithUTF8String:currency_code.c_str()] andParameters:att];
 }
 
-void leanplum_ios::register_for_remote_notifications()
+void leanplum::register_for_remote_notifications()
 {
     [LPPushNotificationsManager sharedManager];
 }
+
+#endif // PLATFORM_IOS
