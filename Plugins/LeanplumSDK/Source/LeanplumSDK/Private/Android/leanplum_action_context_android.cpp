@@ -10,14 +10,14 @@
 
 #include "action_context.h"
 
-struct android_private_data : public private_data
+struct android_action_context_private_data : public private_data
 {
 
 };
 
 action_context::action_context()
 {
-	data = new android_private_data();
+	data = new android_action_context_private_data();
 }
 
 action_context::~action_context()
