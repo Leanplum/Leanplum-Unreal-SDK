@@ -31,16 +31,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
 	static void SetAppIdWithProductionKey(const FString& AppID, const FString& ProductionKey);
 
-	UFUNCTION(BlueprintCallable, Category = "Leanplum")
+	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Attributes,Callback"))
 	static void Start(const FString& UserID, const TMap<FString, FString>& Attributes, const FStartDelegate& Callback);
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
 	static bool HasStarted();
 
-	UFUNCTION(BlueprintCallable, Category = "Leanplum")
+	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Callback"))
 	static void ForceContentUpdate(const FContentUpdateDelegate& Callback);
 
-	UFUNCTION(BlueprintCallable, Category = "Leanplum")
+	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Attributes"))
 	static void SetUserID(const FString& UserID, const TMap<FString, FString>& Attributes);
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
@@ -55,7 +55,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
 	static FString GetDeviceID();
 
-	UFUNCTION(BlueprintCallable, Category = "Leanplum")
+	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Parameters"))
 	static void AdvanceToState(const FString& State, const FString& Info, const TMap<FString, FString>& Parameters);
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
@@ -64,7 +64,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
 	static void ResumeState();
 
-	UFUNCTION(BlueprintCallable, Category = "Leanplum")
+	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Parameters"))
 	static void Track(const FString& Name, float Value, const FString& Info, const TMap<FString, FString>& Parameters);
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")

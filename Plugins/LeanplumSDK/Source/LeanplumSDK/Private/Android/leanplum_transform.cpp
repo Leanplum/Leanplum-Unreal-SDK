@@ -6,9 +6,9 @@
 //  Copyright © 2021 Leanplum, Inc. All rights reserved.
 //
 
-#include "leanplum_transform.h"
-
 #if PLATFORM_ANDROID
+
+#include "leanplum_transform.h"
 
 std::string jstring_to_string(JNIEnv* env, jstring jstr)
 {

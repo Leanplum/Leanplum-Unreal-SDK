@@ -22,6 +22,5 @@ jobject init_hash_map(JNIEnv *env);
 void hash_map_put(JNIEnv *env, jobject map, jobject key, jobject value);
 void hash_map_put_all(JNIEnv* env, jobject map, std::unordered_map<std::string, std::string> cmap);
 
-#endif
-
+#endif // PLATFORM_IOS
 #endif // leanplum_transform_h

@@ -6,10 +6,10 @@
 //  Copyright © 2021 Leanplum, Inc. All rights reserved.
 //
 
+#if PLATFORM_ANDROID
+
 #ifndef leanplum_handle_h
 #define leanplum_handle_h
-
-#if PLATFORM_ANDROID
 
 #include "Android/AndroidJNI.h"
 

@@ -14,8 +14,10 @@
 #include "Android/AndroidJNI.h"
 #include "Android/AndroidApplication.h"
 #include "Android/AndroidJavaEnv.h"
+#include "macros.h"
 #include "leanplum_handle.h"
 #include "leanplum_transform.h"
+#include "action_context.h"
 
 class leanplum_jni
 {
@@ -34,6 +36,27 @@ public:
 	{
 		std::function<void()> action;
 	};
+
+	struct native_action_callback
+	{
+		std::function<void(const action_context *)> action;
+	};
+
+	struct
+	{
+
+	} java_action_arg;
+
+	struct
+	{
+		jclass java_class;
+		jclass class_object;
+
+		jmethodID constructor;
+		jmethodID with_object;
+		jmethodID with_color;
+		jmethodID with_action;
+	} java_action_args;
 
 	jobject context;
 
@@ -75,6 +98,10 @@ public:
 	jmethodID track_with_value;
 	jmethodID track_with_value_and_info;
 	jmethodID track_with_value_info_and_params;
+
+	jmethodID define_action;
+	jmethodID define_action_with_callback;
+	jmethodID define_action_with_options_and_callback;
 
 	jmethodID track_purchase;
 };
