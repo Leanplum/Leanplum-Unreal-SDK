@@ -15,8 +15,8 @@
             }
             dependencies {
                 implementation "com.leanplum:leanplum-core:5.4.2"
-                // implementation "com.leanplum:leanplum-push:5.4.2"
-                // implementation "com.leanplum:leanplum-fcm:5.4.2"
+                implementation "com.leanplum:leanplum-push:5.4.2"
+                implementation "com.leanplum:leanplum-fcm:5.4.2"
                 // implementation "com.leanplum:leanplum-location:5.4.2"
             }
             android {
@@ -25,6 +25,7 @@
                     targetCompatibility JavaVersion.VERSION_1_8
                 }
             }
+			apply plugin: 'com.google.gms.google-services'
         </insert>
     </buildGradleAdditions>
     <baseBuildGradleAdditions>
@@ -55,12 +56,15 @@
                 }
               }
             }
-          }
+          }		  
       </insert>
     </baseBuildGradleAdditions>
     <buildscriptGradleAdditions>
         <insert>
-        </insert>
+			dependencies {
+			    classpath 'com.google.gms:google-services:4.3.5'
+			}
+		</insert>
     </buildscriptGradleAdditions>
     <gradleProperties>
         <insert>
