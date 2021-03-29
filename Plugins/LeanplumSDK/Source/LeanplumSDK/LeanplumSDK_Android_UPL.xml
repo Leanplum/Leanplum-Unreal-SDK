@@ -15,9 +15,13 @@
             }
             dependencies {
                 implementation "com.leanplum:leanplum-core:5.4.2"
-                // implementation "com.leanplum:leanplum-push:5.4.2"
-                // implementation "com.leanplum:leanplum-fcm:5.4.2"
-                // implementation "com.leanplum:leanplum-location:5.4.2"
+                implementation "com.leanplum:leanplum-push:5.4.2"
+                implementation "com.leanplum:leanplum-fcm:5.4.2"
+				// implementation "com.leanplum:leanplum-location:5.4.2"
+				
+				implementation platform('com.google.firebase:firebase-bom:26.7.0')
+				implementation 'com.google.firebase:firebase-messaging'
+				implementation "com.google.android.gms:play-services-games:20.0.1"
             }
             android {
                 compileOptions {
@@ -25,6 +29,7 @@
                     targetCompatibility JavaVersion.VERSION_1_8
                 }
             }
+			apply plugin: 'com.google.gms.google-services'
         </insert>
     </buildGradleAdditions>
     <baseBuildGradleAdditions>
@@ -55,12 +60,15 @@
                 }
               }
             }
-          }
+          }		  
       </insert>
     </baseBuildGradleAdditions>
     <buildscriptGradleAdditions>
         <insert>
-        </insert>
+			dependencies {
+			    classpath 'com.google.gms:google-services:4.3.5'
+			}
+		</insert>
     </buildscriptGradleAdditions>
     <gradleProperties>
         <insert>

@@ -3,7 +3,7 @@
 //  Leanplum-SDK
 //
 //  Created by Milos Jakovljevic.
-//  Copyright © 2021 Leanplum, Inc. All rights reserved.
+//  Copyright ï¿½ 2021 Leanplum, Inc. All rights reserved.
 //
 
 #if PLATFORM_IOS
@@ -13,7 +13,7 @@
 struct ios_private_data : public private_data
 {
 
-}
+};
 
 action_context::action_context()
 {
