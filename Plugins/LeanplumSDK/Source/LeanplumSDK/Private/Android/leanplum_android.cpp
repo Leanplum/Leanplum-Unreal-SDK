@@ -80,7 +80,6 @@ void leanplum::start()
 	UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start"));
 	if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
 	{
-		UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start: calling void method"));
 		leanplum_jni::call_static_method(env, jni->leanplum, jni->start, jni->context);
 	}
 }
