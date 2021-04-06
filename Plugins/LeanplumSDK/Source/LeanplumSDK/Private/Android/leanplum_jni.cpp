@@ -141,4 +141,19 @@ jobject leanplum_jni::call_static_object_method(JNIEnv* env, jclass clazz, jmeth
 	return result;
 }
 
+jboolean leanplum_jni::call_static_boolean_method(JNIEnv* env, jclass clazz, jmethodID method, ...)
+{
+    if (method == nullptr || clazz == nullptr)
+    {
+        return false;
+    }
+
+    va_list args;
+    va_start(args, method);
+    auto result = env->CallStaticBooleanMethod(clazz, method, args);
+    va_end(args);
+
+    return result;
+}
+
 #endif
