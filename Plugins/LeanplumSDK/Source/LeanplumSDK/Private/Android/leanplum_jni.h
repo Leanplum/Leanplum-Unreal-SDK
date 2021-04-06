@@ -25,6 +25,7 @@ public:
 	leanplum_jni();
 
 	static void call_static_method(JNIEnv* env, jclass clazz, jmethodID method, ...);
+    static jboolean call_static_boolean_method(JNIEnv* env, jclass clazz, jmethodID method, ...);
 	static jobject call_static_object_method(JNIEnv* env, jclass clazz, jmethodID method, ...);
 
 	struct native_start_callback

@@ -38,7 +38,7 @@ void leanplum::configure()
 	FString prod_key = settings->prodKey;
 	bool debug = settings->debug;
 
-	std::string client = "unreal_nativeios";
+	std::string client = "unreal-nativeios";
 	std::string sdk_version = "1.0.0";
 
     [Leanplum setClient:[NSString stringWithUTF8String:client.c_str()] withVersion:[NSString stringWithUTF8String:sdk_version.c_str()]];

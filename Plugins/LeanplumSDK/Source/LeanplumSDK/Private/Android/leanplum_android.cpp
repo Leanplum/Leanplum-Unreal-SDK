@@ -39,7 +39,7 @@ void leanplum::configure()
 	FString prod_key = settings->prodKey;
 	bool debug = settings->debug;
 
-	FString client = TEXT("unreal_nativeandroid");
+	FString client = TEXT("unreal-nativeandroid");
 	FString sdk_version = TEXT("1.0.0");
 
 	if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
@@ -164,7 +164,7 @@ bool leanplum::has_started()
 	{
 		UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::has_started"));
 
-		auto started = (bool) leanplum_jni::call_static_object_method(env, jni->leanplum, jni->has_started);
+		auto started = (bool) leanplum_jni::call_static_boolean_method(env, jni->leanplum, jni->has_started);
 		return started;
 	}
 	return false;
