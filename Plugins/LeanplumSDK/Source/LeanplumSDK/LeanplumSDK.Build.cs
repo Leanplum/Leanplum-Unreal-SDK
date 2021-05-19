@@ -72,7 +72,7 @@ namespace UnrealBuildTool.Rules
             {
                 PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private/iOS"));
 
-                PublicAdditionalFrameworks.Add(new Framework("Leanplum", Path.Combine(ModuleDirectory, "../ThirdParty/iOS/Leanplum.embeddedframework.zip")));
+                PublicAdditionalFrameworks.Add(new Framework("Leanplum", Path.Combine(ModuleDirectory, "../ThirdParty/iOS/Leanplum.embeddedframework.zip"), "Leanplum.framework/Leanplum-iOS-SDK.bundle"));
 
                 PublicFrameworks.AddRange(
                     new string[]

@@ -92,8 +92,8 @@ void leanplum::start(const std::string &user_id, const std::unordered_map<std::s
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto pair : attributes)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
 
     NSString *userID = NULL;
@@ -113,8 +113,8 @@ void leanplum::start(const std::string &user_id, const std::unordered_map<std::s
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto pair : attributes)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
 
     NSString *userID = NULL;
@@ -177,8 +177,8 @@ void leanplum::set_user_id_with_attributes(const std::string& user_id, const std
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : attributes)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
 
     [Leanplum setUserId:[NSString stringWithUTF8String:user_id.c_str()]
@@ -197,8 +197,8 @@ void leanplum::set_user_attributes(const std::unordered_map<std::string, std::st
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : attributes)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
 
     [Leanplum setUserAttributes:att];
@@ -243,8 +243,8 @@ void leanplum::advance_to_state(const std::string& state, const std::string& inf
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
 
     [Leanplum advanceTo:[NSString stringWithUTF8String:state.c_str()]
@@ -291,8 +291,8 @@ void leanplum::track(const std::string& name, double value, const std::string& i
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()]
-                forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
     [Leanplum track:[NSString stringWithUTF8String:name.c_str()]
           withValue:value
@@ -340,7 +340,8 @@ void leanplum::track_purchase(const std::string& name, double value, const std::
     NSMutableDictionary *att = [[NSMutableDictionary alloc] init];
     for (const auto &pair : params)
     {
-        [att setObject:[NSString stringWithUTF8String:pair.first.c_str()] forKey:[NSString stringWithUTF8String:pair.second.c_str()]];
+        [att setObject:[NSString stringWithUTF8String:pair.second.c_str()]
+                forKey:[NSString stringWithUTF8String:pair.first.c_str()]];
     }
     [Leanplum trackPurchase:[NSString stringWithUTF8String:name.c_str()]
                   withValue:value
