@@ -58,12 +58,24 @@ public:
 		jmethodID with_color;
 		jmethodID with_action;
 	} java_action_args;
+    
+    struct
+    {
+        jclass java_class;
+        
+        jmethodID constructor;
+    } java_native_start_callback;
+    
+    struct
+    {
+        jclass java_class;
+        
+        jmethodID constructor;
+    } java_native_variables_changed_callback;
 
 	jobject context;
 
 	jclass leanplum;
-	jclass java_native_start_callback;
-	jclass java_native_variables_changed_callback;
 
 	jmethodID configure;
 
@@ -106,6 +118,8 @@ public:
 
 	jmethodID track_purchase;
 };
+
+extern leanplum_jni *jni;
 
 #endif
 

@@ -23,16 +23,17 @@ leanplum_jni* jni;
 
 leanplum::leanplum()
 {
-	jni = new leanplum_jni();
 }
 
 leanplum::~leanplum()
 {
-	delete jni;
+
 }
 
 void leanplum::configure()
 {
+    jni = new leanplum_jni();
+ 
 	const ULeanplumSDKEditor* settings = GetDefault<ULeanplumSDKEditor>();
 	FString app_key = settings->appKey;
 	FString dev_key = settings->devKey;
@@ -46,15 +47,27 @@ void leanplum::configure()
 	{
 		UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::configure: appKey: %s, devKey: %s, prodKey: %s, debug %s"), *app_key, *dev_key, *prod_key, (debug ? TEXT("true") : TEXT("false")));
 
-		FJavaWrapper::CallVoidMethod(env, FJavaWrapper::GameActivityThis, jni->configure, *FJavaHelper::ToJavaString(env, client), *FJavaHelper::ToJavaString(env, sdk_version));
+		FJavaWrapper::CallVoidMethod(env,
+                                     FJavaWrapper::GameActivityThis,
+                                     jni->configure,
+                                     *FJavaHelper::ToJavaString(env, client),
+                                     *FJavaHelper::ToJavaString(env, sdk_version));
 
 		if (debug)
 		{
-			leanplum_jni::call_static_method(env, jni->leanplum, jni->set_app_id_and_dev_key, *FJavaHelper::ToJavaString(env, app_key), *FJavaHelper::ToJavaString(env, dev_key));
+			leanplum_jni::call_static_method(env,
+                                             jni->leanplum,
+                                             jni->set_app_id_and_dev_key,
+                                             *FJavaHelper::ToJavaString(env, app_key),
+                                             *FJavaHelper::ToJavaString(env, dev_key));
 		}
 		else
 		{
-			leanplum_jni::call_static_method(env, jni->leanplum, jni->set_app_id_and_prod_key, *FJavaHelper::ToJavaString(env, app_key), *FJavaHelper::ToJavaString(env, prod_key));
+			leanplum_jni::call_static_method(env,
+                                             jni->leanplum,
+                                             jni->set_app_id_and_prod_key,
+                                             *FJavaHelper::ToJavaString(env, app_key),
+                                             *FJavaHelper::ToJavaString(env, prod_key));
 		}
 	}
 }
@@ -131,15 +144,25 @@ void leanplum::start(const std::string& user_id, const std::unordered_map<std::s
 		auto hash_map = init_hash_map(env);
 		hash_map_put_all(env, hash_map, attributes);
 
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start creating native callback c++ object"));
 		auto native_callback = new leanplum_jni::native_start_callback();
 		native_callback->action = callback;
 
-		auto java_native_callback_global = reinterpret_cast<jclass>(env->NewGlobalRef(jni->java_native_start_callback));
-		auto java_native_callback_constructor = env->GetMethodID(java_native_callback_global, "<init>", "()V");
-		auto java_native_callback = env->NewObject(java_native_callback_global, java_native_callback_constructor);
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start creating native callback java object"));
+		auto java_native_callback = env->NewObject(jni->java_native_start_callback.java_class,
+                                                   jni->java_native_start_callback.constructor);
+        
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start setting native pointer to java object"));
 		set_handle(env, java_native_callback, native_callback);
 
-		leanplum_jni::call_static_method(env, jni->leanplum, jni->start_with_userid_attributes_and_callback, jni->context, juser_id, hash_map, java_native_callback);
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start calling static start method"));
+		leanplum_jni::call_static_method(env,
+                                         jni->leanplum,
+                                         jni->start_with_userid_attributes_and_callback,
+                                         jni->context,
+                                         juser_id,
+                                         hash_map,
+                                         java_native_callback);
 	}
 }
 
@@ -178,11 +201,10 @@ void leanplum::force_content_update(std::function<void()> callback)
 
 		auto native_callback = new leanplum_jni::native_variables_changed_callback();
 		native_callback->action = callback;
-
-		auto java_native_callback_global = reinterpret_cast<jclass>(env->NewGlobalRef(jni->java_native_variables_changed_callback));
-		auto java_native_callback_constructor = env->GetMethodID(java_native_callback_global, "<init>", "()V");
-		auto java_native_callback = env->NewObject(java_native_callback_global, java_native_callback_constructor);
-		set_handle(env, java_native_callback, native_callback);
+        
+        auto java_native_callback = env->NewObject(jni->java_native_variables_changed_callback.java_class,
+                                                   jni->java_native_variables_changed_callback.constructor);
+        set_handle(env, java_native_callback, native_callback);
 
 		leanplum_jni::call_static_method(env, jni->leanplum, jni->force_content_update, java_native_callback);
 	}

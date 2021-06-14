@@ -16,19 +16,20 @@ leanplum* lp;
 ULeanplumSDK::ULeanplumSDK(const FObjectInitializer& objectInitializer) :
 	Super(objectInitializer)
 {
-	lp = new leanplum();
-
-#if PLATFORM_IOS
-	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for iOS"));
-#elif PLATFORM_ANDROID
-	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Android"));
-#else
-	UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Native"));
-#endif
 }
 
 void ULeanplumSDK::Configure()
 {
+    lp = new leanplum();
+
+#if PLATFORM_IOS
+    UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for iOS"));
+#elif PLATFORM_ANDROID
+    UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Android"));
+#else
+    UE_LOG(LogLeanplumSDK, Display, TEXT("LeanplumSDK Plugin initializing for Native"));
+#endif
+
 	lp->configure();
 }
 

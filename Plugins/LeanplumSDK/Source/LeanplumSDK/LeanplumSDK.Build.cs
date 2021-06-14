@@ -17,6 +17,8 @@ namespace UnrealBuildTool.Rules
         public LeanplumSDK(ReadOnlyTargetRules Target) : base(Target)
         {
             PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+            
+            PublicDefinitions.Add("WITH_LEANPLUM_SDK=1");
 
             PublicIncludePaths.AddRange(
             new string[]

@@ -11,7 +11,7 @@
 #include "leanplum_jni.h"
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_epicgames_ue4_GameActivity_00024NativeStartCallback_on_1start(JNIEnv * env, jobject object, jboolean success)
+Java_com_leanplum_ue_NativeStartCallback_on_1start(JNIEnv * env, jobject object, jboolean success)
 {
 	auto callback = get_handle<leanplum_jni::native_start_callback>(env, object);
 	if (callback)
@@ -24,7 +24,7 @@ Java_com_epicgames_ue4_GameActivity_00024NativeStartCallback_on_1start(JNIEnv * 
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_epicgames_ue4_GameActivity_00024NativeVariablesChangedCallback_on_1variables_1changed(JNIEnv * env, jobject object)
+Java_com_leanplum_ue_NativeVariablesChangedCallback_on_1variables_1changed(JNIEnv * env, jobject object)
 {
 	auto callback = get_handle<leanplum_jni::native_variables_changed_callback>(env, object);
 	if (callback)
@@ -37,7 +37,7 @@ Java_com_epicgames_ue4_GameActivity_00024NativeVariablesChangedCallback_on_1vari
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_epicgames_ue4_GameActivity_00024NativeActionCallback_on_1action_1callback(JNIEnv * env, jobject object, jobject context)
+Java_com_leanplum_ue_NativeActionCallback_on_1action_1callback(JNIEnv * env, jobject object, jobject context)
 {
 	auto callback = get_handle<leanplum_jni::native_action_callback>(env, object);
 	if (callback)
@@ -52,18 +52,20 @@ Java_com_epicgames_ue4_GameActivity_00024NativeActionCallback_on_1action_1callba
 
 leanplum_jni::leanplum_jni()
 {
-	UE_LOG(LogLeanplumSDK, Display, TEXT("initializing java jni layer"));
-
 	if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
 	{
 		UE_LOG(LogLeanplumSDK, Display, TEXT("searching for JNI classess and methods"));
 
 		context = FAndroidApplication::GetGameActivityThis();
-		leanplum = FAndroidApplication::FindJavaClass("com/leanplum/Leanplum");
-		java_native_start_callback = FAndroidApplication::FindJavaClass("com/epicgames/ue4/GameActivity$NativeStartCallback");
-		java_native_variables_changed_callback = FAndroidApplication::FindJavaClass("com/epicgames/ue4/GameActivity$NativeVariablesChangedCallback");
-
-		configure = FJavaWrapper::FindMethod(env, FJavaWrapper::GameActivityClassID, "leanplum_configure", "(Ljava/lang/String;Ljava/lang/String;)V", false);
+		leanplum = FAndroidApplication::FindJavaClassGlobalRef("com/leanplum/Leanplum");
+        
+        java_native_start_callback.java_class = FAndroidApplication::FindJavaClassGlobalRef("com/leanplum/ue/NativeStartCallback");
+        java_native_start_callback.constructor = FJavaWrapper::FindMethod(env, java_native_start_callback.java_class, "<init>", "()V", false);
+        
+        java_native_variables_changed_callback.java_class = FAndroidApplication::FindJavaClassGlobalRef("com/leanplum/ue/NativeVariablesChangedCallback");
+        java_native_variables_changed_callback.constructor = FJavaWrapper::FindMethod(env, java_native_variables_changed_callback.java_class, "<init>", "()V", false);
+        
+		configure = FJavaWrapper::FindMethod(env, FJavaWrapper::GameActivityClassID, "configureLeanplumSDK", "(Ljava/lang/String;Ljava/lang/String;)V", false);
 
 		set_app_id_and_dev_key = FJavaWrapper::FindStaticMethod(env, leanplum, "setAppIdForDevelopmentMode", "(Ljava/lang/String;Ljava/lang/String;)V", false);
 		set_app_id_and_prod_key = FJavaWrapper::FindStaticMethod(env, leanplum, "setAppIdForProductionMode", "(Ljava/lang/String;Ljava/lang/String;)V", false);

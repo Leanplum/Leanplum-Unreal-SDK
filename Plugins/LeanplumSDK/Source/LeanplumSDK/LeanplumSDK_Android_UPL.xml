@@ -1,12 +1,19 @@
 <root xmlns:android="http://schemas.android.com/apk/res/android">
     <init>
-        <log text="LeanplumSDK Android initialization"/>
+        <log text="LeanplumSDK Android Plugin initialization"/>
     </init>
 
 	<!-- Copy google services json to apk -->
 	<prebuildCopies>
 		<copyFile src="$S(PluginDir)/../../../../Config/google-services.json" dst="$S(BuildDir)/gradle/app/google-services.json"/>
+        <copyDir src="$S(PluginDir)/Java" dst="$S(BuildDir)/src"/>
 	</prebuildCopies>
+    
+    <proguardAdditions>
+      <insert>
+      -keep public class com.leanplum.ue.*
+      </insert>
+    </proguardAdditions>
 
     <buildGradleAdditions>
         <insert>
@@ -89,44 +96,7 @@
     </gameActivityImportAdditions>
     <gameActivityClassAdditions>
         <insert>
-			class NativeStartCallback extends StartCallback {
-
-			    private long nativeHandle = 0;
-
-			    @Override
-			    public void onResponse(boolean success) {
-			        on_start(success);
-			    }
-
-			    private native void on_start(boolean success);
-			}
-			
-			class NativeVariablesChangedCallback extends VariablesChangedCallback {
-
-			    private long nativeHandle = 0;
-
-			    @Override
-			    public void variablesChanged() {
-			        on_variables_changed();
-			    }
-
-			    private native void on_variables_changed();
-			}
-			
-			class NativeActionCallback extends ActionCallback {
-
-			    private long nativeHandle = 0;
-
-			    @Override
-			    public boolean onResponse(ActionContext context) {
-			        on_action_callback(context);
-					return true;
-			    }
-
-			    private native void on_action_callback(ActionContext context);
-			}
-			
-			public void leanplum_configure(String client, String version) {
+			public void configureLeanplumSDK(String client, String version) {
 			    try {
 			        final Method setClient = Leanplum.class.getDeclaredMethod("setClient", String.class, String.class, String.class);
 			        setClient.setAccessible(true);
