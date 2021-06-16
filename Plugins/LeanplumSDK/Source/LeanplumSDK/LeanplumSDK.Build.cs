@@ -18,7 +18,7 @@ namespace UnrealBuildTool.Rules
         {
             PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
             
-            PublicDefinitions.Add("WITH_LEANPLUM_SDK=1");
+            PublicDefinitions.Add("WITH_LEANPLUMSDK=1");
 
             PublicIncludePaths.AddRange(
             new string[]

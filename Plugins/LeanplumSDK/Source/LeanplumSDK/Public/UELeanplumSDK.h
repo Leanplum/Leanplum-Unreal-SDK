@@ -10,7 +10,7 @@
 
 #include "Modules/ModuleManager.h"
 
-class FLeanplumSDK : public IModuleInterface
+class LEANPLUMSDK_API FLeanplumSDK : public IModuleInterface
 {
 public:
 

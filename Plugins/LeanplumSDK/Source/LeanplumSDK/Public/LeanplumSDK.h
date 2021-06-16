@@ -16,7 +16,7 @@
 #include "LeanplumSDK.generated.h"
 
 UCLASS()
-class ULeanplumSDK : public UObject
+class LEANPLUMSDK_API ULeanplumSDK : public UObject
 {
     GENERATED_UCLASS_BODY()
 public:

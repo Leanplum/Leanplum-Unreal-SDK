@@ -11,7 +11,7 @@
 #include "UELeanplumSDKEditor.generated.h"
 
 UCLASS(config = Engine, defaultconfig)
-class ULeanplumSDKEditor : public UObject
+class LEANPLUMSDK_API ULeanplumSDKEditor : public UObject
 {
     GENERATED_BODY()
 public:

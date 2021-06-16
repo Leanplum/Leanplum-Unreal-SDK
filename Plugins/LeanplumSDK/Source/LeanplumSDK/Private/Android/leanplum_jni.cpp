@@ -21,6 +21,7 @@ Java_com_leanplum_ue_NativeStartCallback_on_1start(JNIEnv * env, jobject object,
 			callback->action((bool)success);
 		}
 	}
+    delete callback;
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -34,6 +35,7 @@ Java_com_leanplum_ue_NativeVariablesChangedCallback_on_1variables_1changed(JNIEn
 			callback->action();
 		}
 	}
+    delete callback;
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -48,6 +50,7 @@ Java_com_leanplum_ue_NativeActionCallback_on_1action_1callback(JNIEnv * env, job
 			callback->action(nullptr);
 		}
 	}
+    delete callback;
 }
 
 leanplum_jni::leanplum_jni()
