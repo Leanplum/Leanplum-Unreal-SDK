@@ -97,6 +97,10 @@ leanplum_jni::leanplum_jni()
 
 		pause_state = FJavaWrapper::FindStaticMethod(env, leanplum, "pauseState", "()V", false);
 		resume_state = FJavaWrapper::FindStaticMethod(env, leanplum, "resumeState", "()V", false);
+        
+        unreal_utils = FAndroidApplication::FindJavaClassGlobalRef("com/leanplum/ue/LeanplumUnrealUtils");
+        get_secured_vars = FJavaWrapper::FindStaticMethod(env, unreal_utils, "getSecuredVars", "()Ljava/util/Map;", false);
+        get_vars = FJavaWrapper::FindStaticMethod(env, unreal_utils, "getVars", "()Ljava/lang/String;", false);
 
 		track = FJavaWrapper::FindStaticMethod(env, leanplum, "track", "(Ljava/lang/String;)V", false);
 		track_with_value = FJavaWrapper::FindStaticMethod(env, leanplum, "track", "(Ljava/lang/String;D)V", false);

@@ -3,10 +3,11 @@
 //  Leanplum-SDK
 //
 //  Created by Milos Jakovljevic.
-//  Copyright © 2021 Leanplum, Inc. All rights reserved.
+//  Copyright ï¿½ 2021 Leanplum, Inc. All rights reserved.
 //
 
 #include "LeanplumSDKBlueprints.h"
+#include "macros.h"
 
 void ULeanplumSDKBlueprints::SetAppIdWithDevelopmentKey(const FString& AppID, const FString& DevelopmentKey)
 {
@@ -20,10 +21,10 @@ void ULeanplumSDKBlueprints::SetAppIdWithProductionKey(const FString& AppID, con
 
 void ULeanplumSDKBlueprints::Start(const FString& UserID, const TMap<FString, FString>& Attributes, const FStartDelegate& Callback)
 {
-	ULeanplumSDK::Start(UserID, Attributes, [=](bool success)
-		{
-			Callback.ExecuteIfBound(success);
-		});
+	ULeanplumSDK::Start(UserID, Attributes, [=] (bool success)
+    {
+        Callback.ExecuteIfBound(success);
+    });
 }
 
 bool ULeanplumSDKBlueprints::HasStarted()
@@ -77,6 +78,16 @@ void ULeanplumSDKBlueprints::PauseState()
 void ULeanplumSDKBlueprints::ResumeState()
 {
 	ULeanplumSDK::ResumeState();
+}
+
+FString ULeanplumSDKBlueprints::GetVars()
+{
+    return ULeanplumSDK::GetVars();
+}
+
+FSecuredVars ULeanplumSDKBlueprints::GetSecuredVars()
+{
+    return ULeanplumSDK::GetSecuredVars();
 }
 
 void ULeanplumSDKBlueprints::Track(const FString& Name, float Value, const FString& Info, const TMap<FString, FString>& Parameters)

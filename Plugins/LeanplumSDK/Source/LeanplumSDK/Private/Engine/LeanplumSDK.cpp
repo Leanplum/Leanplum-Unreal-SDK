@@ -85,7 +85,7 @@ void ULeanplumSDK::Start(const FString& UserID, const TMap<FString, FString>& At
 
 		attrs[key] = value;
 	}
-	lp->start(user_id, attrs, [=](bool success)
+	lp->start(user_id, attrs, [=] (bool success)
 		{
 			if (Callback)
 			{
@@ -157,6 +157,22 @@ FString ULeanplumSDK::GetUserID()
 FString ULeanplumSDK::GetDeviceID()
 {
 	return FString(lp->get_device_id().c_str());
+}
+
+FString ULeanplumSDK::GetVars()
+{
+    return FString(lp->get_vars().c_str());
+}
+
+FSecuredVars ULeanplumSDK::GetSecuredVars()
+{
+    auto vars = lp->get_secured_vars();
+    
+    auto securedVars = FSecuredVars();
+    securedVars.VarsJSON = FString(vars["json"].c_str());
+    securedVars.VarsSignature = FString(vars["signature"].c_str());
+
+    return securedVars;
 }
 
 void ULeanplumSDK::AdvanceToState(const FString& State)

@@ -16,6 +16,18 @@
 #include "UELeanplumSDKEditor.h"
 #include "CoreMinimal.h"
 
+char *copy_string(const char *str)
+{
+    if (str == NULL)
+    {
+        return NULL;
+    }
+    
+    char *res = (char *) malloc(strlen(str) + 1);
+    strcpy(res, str);
+    return res;
+}
+
 @interface Leanplum()
 + (void)setClient:(NSString *)client withVersion:(NSString *)version;
 @end
@@ -126,6 +138,7 @@ void leanplum::start(const std::string &user_id, const std::unordered_map<std::s
     [Leanplum startWithUserId:userID
                userAttributes:att
               responseHandler:^(BOOL success) {
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::start with user id, attributes and callback: CALLBACK: %s"), success ? TEXT("true") : TEXT("false"));
         if (callback) {
             callback(success);
         }
@@ -262,6 +275,37 @@ void leanplum::resume_state()
 {
     UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::resume_state"));
     [Leanplum resumeState];
+}
+
+std::string leanplum::get_vars()
+{
+    UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::get_vars"));
+    id diffs = [[LPVarCache sharedCache] diffs];
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:diffs
+                                                       options:NSUTF8StringEncoding
+                                                         error:nil];
+    NSString* jsonString = [[NSString alloc] initWithData:jsonData
+                                                 encoding:NSUTF8StringEncoding];
+    const char *str = copy_string([jsonString UTF8String]);
+    if (str)
+    {
+        return std::string(str);
+    }
+    return "";
+}
+
+std::unordered_map<std::string, std::string> leanplum::get_secured_vars()
+{
+    UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::get_secured_vars"));
+    LPSecuredVars *vars = [[LPVarCache sharedCache] securedVars];
+    if (vars)
+    {
+        return {
+            { "json", [[vars varsJson] UTF8String] },
+            { "signature", [[vars varsSignature] UTF8String] },
+        };
+    }
+    return {};
 }
 
 void leanplum::track(const std::string& name)

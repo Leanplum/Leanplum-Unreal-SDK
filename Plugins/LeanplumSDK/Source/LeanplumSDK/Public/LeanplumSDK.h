@@ -15,6 +15,16 @@
 #include "UObject/Object.h"
 #include "LeanplumSDK.generated.h"
 
+USTRUCT(BlueprintType)
+struct FSecuredVars
+{
+    GENERATED_BODY()
+    
+    FString VarsJSON;
+    
+    FString VarsSignature;
+};
+
 UCLASS()
 class LEANPLUMSDK_API ULeanplumSDK : public UObject
 {
@@ -87,6 +97,18 @@ public:
     /// </summary>
     /// <returns>Device id.</returns>
     static FString GetDeviceID();
+
+    /// <summary>
+    /// Gets the variables.
+    /// </summary>
+    /// <returns>JSON string containing variables</returns>
+    static FString GetVars();
+
+    /// <summary>
+    /// Gets the secured variables.
+    /// </summary>
+    /// <returns>Struct containing JSON and signature.</returns>
+    static FSecuredVars GetSecuredVars();
 
     /// <summary>
     /// Advances to state.

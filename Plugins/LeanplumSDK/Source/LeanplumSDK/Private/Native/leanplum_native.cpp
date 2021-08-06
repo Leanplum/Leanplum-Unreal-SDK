@@ -142,6 +142,16 @@ void leanplum::resume_state()
 	UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::resume_state"));
 }
 
+std::string leanplum::get_vars()
+{
+    return "";
+}
+
+std::unordered_map<std::string, std::string> leanplum::get_secured_vars()
+{
+    return {};
+}
+
 void leanplum::track(const std::string& name)
 {
 	UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::track"));

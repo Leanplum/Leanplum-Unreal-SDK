@@ -55,6 +55,9 @@ public:
 
 	void pause_state();
 	void resume_state();
+    
+    std::string get_vars();
+    std::unordered_map<std::string, std::string> get_secured_vars();
 
 	void track(const std::string& name);
 	void track(const std::string& name, double value);

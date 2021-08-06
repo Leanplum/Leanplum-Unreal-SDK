@@ -325,12 +325,41 @@ void leanplum::pause_state()
 
 void leanplum::resume_state()
 {
-	if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
-	{
+    if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
+    {
 		UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::resume_state"));
 
 		leanplum_jni::call_static_method(env, jni->leanplum, jni->resume_state);
 	}
+}
+
+std::string leanplum::get_vars()
+{
+    if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
+    {
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::get_vars"));
+        return jstring_to_string(env, (jstring) leanplum_jni::call_static_object_method(env, jni->unreal_utils, jni->get_vars));
+    }
+    return "";
+}
+
+std::unordered_map<std::string, std::string> leanplum::get_secured_vars()
+{
+    if (JNIEnv* env = FAndroidApplication::GetJavaEnv())
+    {
+        UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::get_secured_vars"));
+        auto map = leanplum_jni::call_static_object_method(env, jni->unreal_utils, jni->get_secured_vars);
+        if (map)
+        {
+            auto json = jstring_to_string(env, (jstring) hash_map_get(env, map, string_to_jstring(env, "json")));
+            auto signature = jstring_to_string(env, (jstring) hash_map_get(env, map, string_to_jstring(env, "signature")));
+            return {
+                { "json", json },
+                { "signature", signature },
+            };
+        }
+    }
+    return {};
 }
 
 void leanplum::track(const std::string& name)

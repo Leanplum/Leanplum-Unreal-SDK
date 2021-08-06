@@ -3,7 +3,7 @@
 //  Leanplum-SDK
 //
 //  Created by Milos Jakovljevic.
-//  Copyright © 2021 Leanplum, Inc. All rights reserved.
+//  Copyright ï¿½ 2021 Leanplum, Inc. All rights reserved.
 //
 
 #pragma once
@@ -63,6 +63,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum")
 	static void ResumeState();
+    
+    UFUNCTION(BlueprintCallable, Category = "Leanplum")
+    static FString GetVars();
+    
+    UFUNCTION(BlueprintCallable, Category = "Leanplum")
+    static FSecuredVars GetSecuredVars();
 
 	UFUNCTION(BlueprintCallable, Category = "Leanplum", meta = (AutoCreateRefTerm = "Parameters"))
 	static void Track(const FString& Name, float Value, const FString& Info, const TMap<FString, FString>& Parameters);

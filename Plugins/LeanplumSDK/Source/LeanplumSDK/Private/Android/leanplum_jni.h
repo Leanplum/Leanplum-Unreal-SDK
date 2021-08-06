@@ -76,6 +76,7 @@ public:
 	jobject context;
 
 	jclass leanplum;
+    jclass unreal_utils;
 
 	jmethodID configure;
 
@@ -106,6 +107,9 @@ public:
 
 	jmethodID pause_state;
 	jmethodID resume_state;
+    
+    jmethodID get_vars;
+    jmethodID get_secured_vars;
 
 	jmethodID track;
 	jmethodID track_with_value;

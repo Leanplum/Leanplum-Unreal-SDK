@@ -62,5 +62,13 @@ void hash_map_put_all(JNIEnv* env, jobject map, std::unordered_map<std::string, 
     }
 }
 
+jobject hash_map_get(JNIEnv* env, jobject map, jobject key)
+{
+    auto map_class = env->GetObjectClass(map);
+    auto get_method = env->GetMethodID(map_class, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
+    
+    return env->CallObjectMethod(map, get_method, key);
+}
+
 
 #endif
