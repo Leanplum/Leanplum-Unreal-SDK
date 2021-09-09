@@ -5,6 +5,7 @@ import com.leanplum.SecuredVars;
 import com.leanplum.internal.VarCache;
 import com.leanplum.internal.JsonConverter;
 
+import java.util.Map;
 import java.util.HashMap;
 
 public class LeanplumUnrealUtils {
@@ -13,7 +14,7 @@ public class LeanplumUnrealUtils {
         return JsonConverter.toJson(VarCache.getDiffs());
     }
 
-    public static HashMap<String, String> getSecuredVars() {
+    public static Map<String, String> getSecuredVars() {
         SecuredVars securedVars = Leanplum.securedVars();
         
         if (securedVars != null) {
