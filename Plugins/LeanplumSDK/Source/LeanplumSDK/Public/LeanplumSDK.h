@@ -18,10 +18,12 @@
 USTRUCT(BlueprintType)
 struct FSecuredVars
 {
-    GENERATED_BODY()
+    GENERATED_USTRUCT_BODY()
     
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Leanplum")
     FString VarsJSON;
     
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Leanplum")
     FString VarsSignature;
 };
 
