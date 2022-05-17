@@ -281,10 +281,22 @@ std::string leanplum::get_vars()
 {
     UE_LOG(LogLeanplumSDK, Display, TEXT("leanplum::get_vars"));
     id diffs = [[LPVarCache sharedCache] diffs];
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:diffs
+    
+    if (![NSJSONSerialization isValidJSONObject:diffs]) 
+    {
+        return "";
+    }
+
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:diffs
                                                        options:NSUTF8StringEncoding
-                                                         error:nil];
-    NSString* jsonString = [[NSString alloc] initWithData:jsonData
+                                                         error:&error];
+    if (error) 
+    {
+        return "";
+    }
+
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData
                                                  encoding:NSUTF8StringEncoding];
     const char *str = copy_string([jsonString UTF8String]);
     if (str)
